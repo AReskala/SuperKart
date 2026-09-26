@@ -37,6 +37,9 @@ def predict_sales():
     # Make a prediction using the trained model
     prediction = model.predict(input_data).tolist()[0]
 
+    # Clips the prediction to be non-negative
+    prediction = max(0, round(prediction, 2))
+
     # Return the prediction as a JSON response
     return jsonify({'Sales': prediction})
 
@@ -59,9 +62,12 @@ def predict_sales_batch():
     # Make predictions for the batch data
     predictions = model.predict(input_data).tolist()
 
-    # Create an output dictionary mapping row index to predicted sales
-    output_dict = {str(i): round(pred, 2) for i, pred in enumerate(predictions)}
+    # Clips the predictions to be non-negative
+    predictions = np.clip(predictions, a_min=0, a_max=None)
 
+    # Create an output dictionary mapping row index to predicted sales
+    output_dict = {str(i): float(round(pred, 2)) for i, pred in enumerate(predictions)}
+    
     return output_dict
 
 
