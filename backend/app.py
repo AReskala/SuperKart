@@ -38,7 +38,7 @@ def predict_sales():
     prediction = model.predict(input_data).tolist()[0]
 
     # Clips the prediction to be non-negative
-    prediction = max(0, round(prediction, 2))
+    prediction = max(0.0, round(prediction, 2))
 
     # Return the prediction as a JSON response
     return jsonify({'Sales': prediction})
